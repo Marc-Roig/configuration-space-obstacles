@@ -56,8 +56,8 @@ function areSegmentsIntersected() {
 	y0 = x0*a1 + b1
 
 	//Check if x0 is in bot segments
-	if (Math.min(x1, x2) < x0 < Math.max(x1,x2) && 
-		Math.min(x3, x4) < x0 < Math.max(x3,x4)) return true
+	if (Math.min(x1, x2) < x0 && x0 < Math.max(x1,x2) && 
+		Math.min(x3, x4) < x0 && x0 < Math.max(x3,x4)) return true
 	else return false
 
 
