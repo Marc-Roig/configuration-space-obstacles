@@ -6,18 +6,23 @@ function Polygon() {
     this.finished = false
     this.movable = false;
 
-    this.rCol = random(0, 255)
-    this.gCol = random(0, 255)
-    this.bCol = random(0, 255)
+    this.rCol = random(50, 165)
+    this.gCol = random(50, 165)
+    this.bCol = random(50, 165)
 
     this.addCorner = function(p) {
 
+        // p.parent = this
         this.corners.push(p)
+        return this
 
     }
 
+
     //Calculates all segments of polygon
     this.calculateSegments = function() {
+
+        // if (!this.finished) return
 
         this.segments = []
 
@@ -53,9 +58,9 @@ function Polygon() {
 
             this.segments.push(new Segment(a, b, lastCorner, firstCorner))
 
-
         }
 
+        return this
     }
 
     //Returns all the intersections between the input segment and the polygon
@@ -116,31 +121,92 @@ function Polygon() {
 
         if (!(XRayIntersections instanceof Array)) return false //In some cases segmentIntersections return null
 
-        push()
-        for (let intersection of XRayIntersections) {
-            stroke(255)
-            strokeWeight(15)
-            point(intersection.x, intersection.y)
-            stroke(0)
-            strokeWeight(10)
-            point(intersection.x, intersection.y)
-        }
-        pop()
-
         if (XRayIntersections.length % 2 == 0) return false
         else return true
 
     }
+    
+    // The solution involves determining if three points are listed in a counterclockwise order. 
+    // So say you have three points A, B and C. If the slope of the line AB is less than the slope 
+    // of the line AC then the three points are listed in a counterclockwise order. Credits to:
+    // https://bryceboe.com/2006/10/23/line-segment-intersection-algorithm/
 
     this.isSegmentIntersecting = function(segmentIn) {
 
+        for (let segment of this.segments) {
+
+            if (ccw(segment.p1, segmentIn.p1, segmentIn.p2) != ccw(segment.p2, segmentIn.p1, segmentIn.p2) && 
+                ccw(segment.p1, segment.p2,   segmentIn.p1) != ccw(segment.p1, segment.p2,   segmentIn.p2)) {
+                return true
+            }
+
+        }
+
+        return false
     }
 
-}
+    function ccw(A, B, C) {
+        return ((C.y-A.y)*(B.x-A.x) > (B.y-A.y)*(C.x-A.x)) ? true : false
+    }
 
-Polygon.arePolygonsIntersecting = function(poly1, poly2) {
+    this.render = function() {
 
+        if (this.finished) {
 
+            //DRAW POLYGON
+            beginShape()
+
+            if (!this.intersected) fill(this.rCol, this.gCol, this.bCol)
+            else fill(255, 0, 0)
+
+            for (let vector of this.corners) {
+                vertex(vector.x, vector.y)
+            }
+
+            endShape(CLOSE)
+
+            //CHECK FOR INTERSECTIONS
+            // console.log(this.isPointInPolygon(createVector(mouseX, mouseY)))
+
+            //MOVE POLYGON
+            if (this.movable) {
+
+                let XSpeed = mouseX - pmouseX
+                let YSpeed = mouseY - pmouseY
+
+                for(let corner of this.corners) {
+                    // console.log(corner.x)
+                    corner.x += XSpeed
+                    corner.y += YSpeed
+                }    
+                
+            }
+
+        }
+
+        //If its not closed link the current corners with lines
+        else {
+
+            strokeWeight(2)
+
+            let cornersNum = this.corners.length
+
+            if (cornersNum > 0) {
+
+                //Draw the last line linking the last point with the mouse
+                line(mouseX, mouseY, this.corners[cornersNum-1].x, this.corners[cornersNum-1].y)
+
+                //Draw a line between a corner and the previous one
+                for (let i = 1; i < cornersNum; i++) { 
+                    line (this.corners[i].x, this.corners[i].y, this.corners[i-1].x, this.corners[i-1].y) 
+                }
+            }
+
+        
+
+        }
+
+    }
 
 }
 
@@ -156,72 +222,5 @@ function Segment(a, b, p1, p2) {
         line(p1.x, p1.y, p2.x, p2.y)
 
     }
-
-}
-
-function drawPoligons() {
-
-
-    push()
-
-    for (let polygon of polygons) {
-
-        //If polygon has been closed and finished draw a p5 Shape
-        if (polygon.finished) {
-
-            //DRAW POLYGON
-            beginShape()
-
-            fill(polygon.rCol, polygon.gCol, polygon.bCol)
-
-            for (let vector of polygon.corners) {
-                vertex(vector.x, vector.y)
-            }
-
-            endShape(CLOSE)
-
-            //CHECK FOR INTERSECTIONS
-            console.log(polygon.isPointInPolygon(createVector(mouseX, mouseY)))
-
-            //MOVE POLYGON
-            if (polygon.movable) {
-
-                let XSpeed = mouseX - pmouseX
-                let YSpeed = mouseY - pmouseY
-
-                for(let corner of polygon.corners) {
-                    // console.log(corner.x)
-                    corner.x += XSpeed
-                    corner.y += YSpeed
-                }    
-                
-            }
-
-        }
-
-        //If its not closed link the current corners with lines
-        else {
-
-            strokeWeight(2)
-
-            let cornersNum = polygon.corners.length
-
-            if (cornersNum > 0) {
-
-                //Draw the last line linking the last point with the mouse
-                line(mouseX, mouseY, polygon.corners[cornersNum-1].x, polygon.corners[cornersNum-1].y)
-
-                //Draw a line between a corner and the previous one
-                for (let i = 1; i < cornersNum; i++) { 
-                    line (polygon.corners[i].x, polygon.corners[i].y, polygon.corners[i-1].x, polygon.corners[i-1].y) 
-                }
-            }
-
-        }
-
-        
-    }
-
-    pop()
 
 }

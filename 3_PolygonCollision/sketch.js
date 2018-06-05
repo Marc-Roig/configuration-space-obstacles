@@ -1,5 +1,6 @@
 
 let polygons = []
+let arm1
 
 function setup() {
 
@@ -9,9 +10,16 @@ function setup() {
 
     polygons.push(new Polygon())
 
+    arm1 = new Polygon()
+    arm1.addCorner(createVector(200, 150))
+        .addCorner(createVector(400, 150))
+        .addCorner(createVector(400, 400))
+        .addCorner(createVector(200, 400))
+        .calculateSegments()
+        .finished = true
+
     stroke(200)
     strokeWeight(2)
-    // if (areSegmentsIntersected(p1, p2, p3, p4)) console.log("Segments are colliding")
 
 }
 
@@ -19,10 +27,17 @@ function draw() {
 
     background('#0e0e0e')
 
-    drawPoligons()
+    // RENDER ALL POLYGONS
+    arm1.render()
 
-    //Mouse ray tracing visualitzation
-    line(mouseX, mouseY, width, mouseY)
+    for (let polygon of polygons) {
+        polygon.render()
+    }    
+
+    // COLLISION DETECTION
+    // arm1.arePolygonsIntersecting(polygons) //To update which polygon is intersected
+
+    arm1.isIntersectedByPolygons(polygons, true)
 
     drawFrame()
 }
@@ -55,6 +70,7 @@ function mouseReleased() {
 
     for (let polygon of polygons) {
 
+        if (!polygon.finished) continue
         polygon.movable = false
         polygon.calculateSegments() //Segments used to optimize calculations have to be refreshed
 
@@ -69,7 +85,7 @@ function keyTyped() {
         polygons.push(new Polygon())
 
     }
-    if (key = 'e') { //Delete finished polygon, pop first empty or not finished polygon and the previous one
+    if (key == 'e') { //Delete finished polygon, pop first empty or not finished polygon and the previous one
 
         polygons.pop()
         polygons.pop()
@@ -81,8 +97,11 @@ function keyTyped() {
 
 function doubleClicked() {
 
+    polygons[polygons.length-1].corners.pop() //Because of the double click two corners are added, one is poped 
+
+    if(polygons[polygons.length-1].corners.length < 3) return //Polygon needs at least 3 points
+
     polygons[polygons.length-1].finished = true
-    polygons[polygons.length-1].corners.pop()
     polygons[polygons.length-1].calculateSegments() //Are vertices are precalculate to optimize calculations
 
     polygons.push(new Polygon()) //Once the polygon is finished prepare to draw another one
