@@ -85,6 +85,13 @@ function keyTyped() {
         polygons.push(new Polygon())
 
     }
+
+    if (key == 'z') { //Delete polygon that user is still drawing
+
+        polygons[polygons.length-1].corners.pop()
+
+    }
+
     if (key == 'e') { //Delete finished polygon, pop first empty or not finished polygon and the previous one
 
         polygons.pop()

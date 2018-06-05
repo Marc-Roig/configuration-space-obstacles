@@ -68,7 +68,7 @@ function Polygon() {
 
         let intersections = []
 
-        for (let segment of this.segments) {
+        for (const segment of this.segments) {
 
             if (segment.a == null) { //segment is vertical
 
@@ -87,9 +87,9 @@ function Polygon() {
                 continue
             }
 
-            if (segment.a == segmentIn.a) return false 
+            if (segment.a == segmentIn.a) continue
 
-            //Solve for  -> (y = a1*x + b1) and (y = a2*x + b2)
+            //Solve for  -> (y = a1*x + b1) and (y = a2*x + b2) 
             let x = -(segmentIn.b-segment.b)/(segmentIn.a-segment.a)
             // let y = p0.x*a1 + b1
 

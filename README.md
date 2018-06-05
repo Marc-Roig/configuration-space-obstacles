@@ -8,4 +8,5 @@ I divided the key concepts of the algorithm in various subfolders.
 
 |  Topics  | GIF |  Summary  |
 | :------: | --- | :-------: |
+|2. Detect point in polygon | <a href="https://marc-roig.github.io/Configuration_Space_Obstacles/2_PointInsidePolygon/"  target="_blank"> <img border="0" alt="PolygonCollision" src="https://i.gyazo.com/2223a7548d772c8a543c8f28522ab258.gif" width="200" height="225"> </a> | Ray Trace mouse to check if it is inside a drawn polygon |
 |3. Polygon collision | <a href="https://marc-roig.github.io/Configuration_Space_Obstacles/3_PolygonCollision/"  target="_blank"> <img border="0" alt="PolygonCollision" src="https://i.gyazo.com/d386f17837f0d655cceb4f24702e04a7.gif" width="200" height="225"> </a> | Polygons intersect with each other |
