@@ -8,4 +8,4 @@ I divided the key concepts of the algorithm in various subfolders.
 
 Topics | Summary
 ------------ | -------------
-![polygon intersection](https://gyazo.com/d386f17837f0d655cceb4f24702e04a7) | Polygons intersect with each other
+![polygon intersection](https://i.gyazo.com/d386f17837f0d655cceb4f24702e04a7.gif) | Polygons intersect with each other
