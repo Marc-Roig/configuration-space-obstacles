@@ -43,11 +43,8 @@ function Arm() {
 
     this.setAngles = function(newTheta1, newTheta2) {
 
-        const theta1Dif = newTheta1 - this.theta1
         const theta2Dif = newTheta2 - this.theta2
 
-        const cosT1D = Math.cos(theta1Dif) //Cos theta 1 difference
-        const sinT1D = Math.sin(theta1Dif) //Sin theta 1 difference
         const cosT1  = Math.cos(this.theta1)
         const sinT1  = Math.sin(this.theta1)
         const cosT2D = Math.cos(theta2Dif)
@@ -55,32 +52,28 @@ function Arm() {
         const cosNT1 = Math.cos(newTheta1)
         const sinNT1 = Math.sin(newTheta1)
 
-        this.arm1.rotate(theta1Dif)
+        console.time("a")
+        let a = cosNT1*cosT2D
+        let b = sinNT1*sinT2D
+        let c = cosNT1*sinT2D
+        let d = sinNT1*cosT2D
 
-        // this.arm2.rotate(-this.theta1)
-        // this.arm2.translate(0,-this.l1)
+        this.arm1.rotate(newTheta1 - this.theta1)
 
-        this.arm2.applyTransformationMatrix([[ cosT1, sinT1 , 0],
-                                             [-sinT1, cosT1 ,-this.l1],
-                                             [  0   ,   0   , 1]])
-
-        this.arm2.rotate(theta2Dif)
-        this.arm2.translate(0, this.l1)
-        this.arm2.rotate(newTheta1)
-
-        // this.arm2.applyTransformationMatrix( [[cosT2D*cosNT1 - sinT2D*sinNT1 , -cosNT1*sinT2D  - sinNT1*cosT2D, -sinNT1*this.l1],
-        //                                      [ sinNT1*cosT2D + cosNT1*sinT2D , -sinT2D*sinNT1  + cosT2D*cosT2D,  cosNT1*this.l1],
-        //                                      [              0              ,                0              ,        1       ]] )
+        this.arm2.applyTransformationMatrix([[cosT1*(a-b)+sinT1*(d+c), sinT1*(a-b)-cosT1*(c+d), (c+d-sinNT1)*this.l1],
+                                             [cosT1*(d+c)+sinT1*(b-a), sinT1*(d+c)+cosT1*(a-b), (b-a+cosNT1)*this.l1],
+                                             [           0           ,            0           ,       1      ]])
 
 
+        // this.arm2.applyTransformationMatrix([[ cosT1, sinT1 , 0],
+        //                                      [-sinT1, cosT1 ,-this.l1],
+        //                                      [  0   ,   0   , 1]])
 
-        // this.arm2.applyTransformationMatrix([[1, 0, 0      ],
-        //                                      [0, 1, this.l1],
-        //                                      [0, 0, 1      ]])
-
-        // this.arm2.applyTransformationMatrix([[ cosT1, -sinT1, 0],
-        //                                      [ sinT1,  cosT1, 0],
-        //                                      [    0  ,     0  , 1]])
+        // this.arm2.applyTransformationMatrix([[cosNT1*cosT2D-sinNT1*sinT2D, -cosNT1*sinT2D-sinNT1*cosT2D, -sinNT1*this.l1],
+        //                                      [sinNT1*cosT2D+cosNT1*sinT2D, -sinNT1*sinT2D+cosNT1*cosT2D, cosNT1*this.l1],
+        //                                      [             0             ,              0              ,        1       ]])
+  
+        console.timeEnd("a")
 
         this.theta1 = newTheta1
         this.theta2 = newTheta2
