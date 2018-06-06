@@ -53,16 +53,14 @@ function Arm() {
         const sinNT1 = Math.sin(newTheta1)
 
         console.time("a")
-        let a = cosNT1*cosT2D
-        let b = sinNT1*sinT2D
-        let c = cosNT1*sinT2D
-        let d = sinNT1*cosT2D
+        let a = cosNT1*cosT2D - sinNT1*sinT2D
+        let b = cosNT1*sinT2D + sinNT1*cosT2D
 
         this.arm1.rotate(newTheta1 - this.theta1)
 
-        this.arm2.applyTransformationMatrix([[cosT1*(a-b)+sinT1*(d+c), sinT1*(a-b)-cosT1*(c+d), (c+d-sinNT1)*this.l1],
-                                             [cosT1*(d+c)+sinT1*(b-a), sinT1*(d+c)+cosT1*(a-b), (b-a+cosNT1)*this.l1],
-                                             [           0           ,            0           ,       1      ]])
+        this.arm2.applyTransformationMatrix([[cosT1*a+sinT1*b, sinT1*a-cosT1*b, (b-sinNT1)*this.l1],
+                                             [cosT1*b-sinT1*a, sinT1*b+cosT1*a, (cosNT1-a)*this.l1],
+                                             [       0       ,        0       ,          1      ]])
 
 
         // this.arm2.applyTransformationMatrix([[ cosT1, sinT1 , 0],
@@ -86,13 +84,7 @@ function Arm() {
         push()
 
         rotate(-PI/2) //Offset to set 0 degrees pointing right
-        // rotate((this.theta1)) //Positive angles move counterclockwise
-        // this.arm1.rotate(this.theta1)
         this.arm1.render()
-
-        // translate(0, this.l1)
-        // rotate((this.theta2))
-
         this.arm2.render()
 
         pop()
