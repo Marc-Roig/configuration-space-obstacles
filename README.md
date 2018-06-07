@@ -4,6 +4,9 @@ For the purpose of path planning it is useful to work with the configuration spa
 
 This program will be able to transform normal xy coordinates of a SCARA robot and also transform the obstacles that will be in his surroundings to the C-Space. Applying some sort of path finding algorithm such as A* the fastest movement will be executed.
 
+
+<a href="https://marc-roig.github.io/Configuration_Space_Obstacles/2_PointInsidePolygon/"  class="center"> <img border="0" alt="PolygonCollision" src="https://i.gyazo.com/fa1dd2b9af3915df379d525395c46e95.gif"> </a>
+
 I divided the key concepts of the algorithm in various subfolders (click on images to see it in action).
 
 |  Topics  | GIF |  Summary  |
