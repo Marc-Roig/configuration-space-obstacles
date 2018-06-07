@@ -1,0 +1,4 @@
+Arm.prototype.renderCS = function(){
+
+
+}

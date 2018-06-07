@@ -52,7 +52,6 @@ function Arm() {
         const cosNT1 = Math.cos(newTheta1)
         const sinNT1 = Math.sin(newTheta1)
 
-        console.time("a")
         let a = cosNT1*cosT2D - sinNT1*sinT2D
         let b = cosNT1*sinT2D + sinNT1*cosT2D
 
@@ -70,11 +69,11 @@ function Arm() {
         // this.arm2.applyTransformationMatrix([[cosNT1*cosT2D-sinNT1*sinT2D, -cosNT1*sinT2D-sinNT1*cosT2D, -sinNT1*this.l1],
         //                                      [sinNT1*cosT2D+cosNT1*sinT2D, -sinNT1*sinT2D+cosNT1*cosT2D, cosNT1*this.l1],
         //                                      [             0             ,              0              ,        1       ]])
-  
-        console.timeEnd("a")
 
         this.theta1 = newTheta1
         this.theta2 = newTheta2
+
+        return this
 
     }
 
@@ -88,6 +87,8 @@ function Arm() {
         this.arm2.render()
 
         pop()
+
+        return this
 
     }
 

@@ -1,6 +1,7 @@
 
 let polygons = []
 let scara
+let cursor
 
 let centerX
 let centerY
@@ -8,18 +9,22 @@ let centerY
 function setup() {
 
     //Canvas
-    createCenteredCanvas()
+    createCenteredCanvas(1200, 600)
 
     frameRate(20)
     stroke(200)
     strokeWeight(2)
 
-    centerX = width/2
+    centerX = width/4
     centerY = height/2
 
     //Polygons
     polygons.push(new Polygon())
     scara = new Arm()
+
+    cursor = new mappedCursor([-PI, PI], [-PI, PI], [width/2, width], [0, height])
+    cursor.setPos(1,1)
+          .followMouse = false
 
 }
 
@@ -28,25 +33,55 @@ function draw() {
     background('#0e0e0e')
     drawFrame()
 
-    translate(width/2, height/2)
+    //RIGHT SCREEN
+    cursor.render()
+    if (mouseInRightScreen()) {
+
+        cursor.mouseFollow()
+              .updatePos()
+        scara.setAngles(cursor.pos.x, cursor.pos.y)
+
+
+    }
+
+    //LEFT SCREEN
+    translate(centerX, centerY)
 
     // RENDER ALL POLYGONS
-    // for (let polygon of polygons) {
-    //     polygon.render()
-    // }    
-
-    newAngles = scara.calculateInverse(mouseX - centerX, mouseY - centerY)
-    scara.setAngles(newAngles.angle1, newAngles.angle2)
+    for (let polygon of polygons) {
+        polygon.render()
+    }    
+    if (mouseInLeftScreen()) {
+        newAngles = scara.calculateInverse(mouseX - centerX, mouseY - centerY)
+        scara.setAngles(newAngles.angle1, newAngles.angle2)
+        cursor.setPos(newAngles.angle1, newAngles.angle2)
+        console.log(newAngles)
+    }
+    
     // scara.detectCollisions(polygons)
     scara.render()
 
+    
     // COLLISION DETECTION
     // arm1.arePolygonsIntersecting(polygons) //To update which polygon is intersected
 
     // arm1.isIntersectedByPolygons(polygons, true)
 
 }
+function mouseInLeftScreen() {
 
+    if (mouseX > 0 && mouseX < width/2 &&
+        mouseY > 0 && mouseY < height) return true
+    return false
+
+}
+function mouseInRightScreen() {
+
+    if (mouseX > width/2 && mouseX < width &&
+        mouseY > 0 && mouseY < height) return true
+    return false
+
+}
 function mousePressed() {
 
 
@@ -55,10 +90,10 @@ function mousePressed() {
 
     //If user is not drawing any polygon, clicking on an existing polygon
     //will make it move
-    if (polygons[polygons.length-1].corners.length == 0) {
+    if (polygons[polygons.length-1].corners.length == 0 && mouseInLeftScreen()) {
 
         for (let polygon of polygons) {
-            if (polygon.isPointInPolygon(createVector(mouseX - width/2, mouseY - height/2)) && polygon.finished) {
+            if (polygon.isPointInPolygon(createVector(mouseX - centerX, mouseY - centerY)) && polygon.finished) {
             
                 polygon.movable = true
                 moveObjects = true
@@ -68,7 +103,7 @@ function mousePressed() {
     }
 
     //If an polygon is moving don't add any corner
-    if (!moveObjects) polygons[polygons.length-1].addCorner(createVector(mouseX - width/2, mouseY - height/2))
+    if (!moveObjects && mouseInLeftScreen()) polygons[polygons.length-1].addCorner(createVector(mouseX - centerX, mouseY - centerY))
 
 }
 
@@ -121,9 +156,9 @@ function doubleClicked() {
 
 }
 
-function createCenteredCanvas() {
+function createCenteredCanvas(x, y) {
 
-  createCanvas(600, 600).position(
+  createCanvas(x, y).position(
     (windowWidth - width) / 2,
     (windowHeight - height) / 2
   )
@@ -137,6 +172,7 @@ function drawFrame() {
     strokeWeight(3)
     line(0, 0, width, 0)
     line(0, 0, 0, height)
+    line(width/2, 0, width/2, height)
     line(width-1, height-1, width-1, 0)
     line(width-1, height-1, 0, height-1)
     pop()
