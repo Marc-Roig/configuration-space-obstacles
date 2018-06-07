@@ -30,6 +30,7 @@ function Arm() {
 
     this.detectCollisions = function(polys) {
 
+        // console.log(this.arm1.isIntersectedByPolygons(polys))
         if (this.arm1.isIntersectedByPolygons(polys) || this.arm2.isIntersectedByPolygons(polys)) {
             this.arm1.intersected = true
             this.arm2.intersected = true
@@ -38,6 +39,14 @@ function Arm() {
             this.arm1.intersected = false
             this.arm2.intersected = false
         }
+
+    }
+
+    //The same but returns true or false instead of updating the intersected parameter
+    this.isCollisioning = function(polys) {
+
+        if (this.arm1.isIntersectedByPolygons(polys) || this.arm2.isIntersectedByPolygons(polys)) return true
+        else return false
 
     }
 
@@ -82,7 +91,7 @@ function Arm() {
         //DRAW ARMS
         push()
 
-        rotate(-PI/2) //Offset to set 0 degrees pointing right
+        // rotate(-PI/2) //Offset to set 0 degrees pointing right
         this.arm1.render()
         this.arm2.render()
 
@@ -112,7 +121,7 @@ function Arm() {
             }
 
             return {
-                angle1: q2,
+                angle1: q2 - PI/2,
                 angle2: q3
             }
 
@@ -121,7 +130,7 @@ function Arm() {
         else { //Point outside arms range, leave arms at max extension
 
             return {
-                angle1: theta,
+                angle1: theta - PI/2,
                 angle2: 0
             }
 

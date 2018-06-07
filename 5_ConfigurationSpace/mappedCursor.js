@@ -16,9 +16,9 @@ function mappedCursor(xrange, yrange, xScreenRange, yScreenRange) {
 		//If one of the imputs is not in the xRange, yRange interval make it flip through the other side
 		//This will not work if for example with angles the value is two or more times greater than the interval
 		if (a < this.xRange[0]) a = a - this.xRange[0] + this.xRange[1]
-		if (a > this.xRange[0]) a = a - this.xRange[1] + this.xRange[0
+		if (a > this.xRange[1]) a = a - this.xRange[1] + this.xRange[0]
 		if (b < this.yRange[0]) b = b - this.yRange[0] + this.yRange[1]
-		if (b > this.yRange[0]) b = b - this.yRange[1] + this.yRange[0]
+		if (b > this.yRange[1]) b = b - this.yRange[1] + this.yRange[0]
 
 		//Save the inputs in case they are needed
 		this.pos.x = a

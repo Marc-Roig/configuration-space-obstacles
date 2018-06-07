@@ -41,8 +41,8 @@ function Polygon() {
 
         for (let i = 0; i < this.corners.length; i++) {
 
-            var lastCorner
-            var firstCorner
+            let lastCorner
+            let firstCorner
 
             if (i == this.corners.length - 1) { //Segment between last and first corner
 
@@ -144,7 +144,7 @@ function Polygon() {
     // of the line AC then the three points are listed in a counterclockwise order. Credits to:
     // https://bryceboe.com/2006/10/23/line-segment-intersection-algorithm/
 
-    this.isSegmentIntersecting = function(segmentIn) {
+    this.isSegmentIntersecting2 = function(segmentIn) {
 
         for (let segment of this.segments) {
 
@@ -156,6 +156,37 @@ function Polygon() {
         }
 
         return false
+    }
+
+    //This solution does not need this polygon to have segments calculated. This allows a better performance
+    //since the slope and intercept do not have to be calculated. Another funcion could be implemented where
+    //it does not need an segment input rather two points, but for this particular case it's fine. A similar
+    //method used in the calculateSegments() is used to know which point is from which segment of the polygon.
+    
+    this.isSegmentIntersecting = function(segmentIn) {
+
+        for (let i = 0; i < this.corners.length - 1; i++) {
+
+            if (i == this.corners.length - 1) { //Segment between last and first corner
+
+                if (ccw(this.corners[i], segmentIn.p1,    segmentIn.p2) != ccw(this.corners[0], segmentIn.p1,    segmentIn.p2) && 
+                    ccw(this.corners[i], this.corners[0], segmentIn.p1) != ccw(this.corners[i], this.corners[0], segmentIn.p2)) {
+                    return true
+                }
+            }
+
+            else { //Segment between other corners
+
+                if (ccw(this.corners[i], segmentIn.p1,    segmentIn.p2) != ccw(this.corners[i+1], segmentIn.p1,    segmentIn.p2) && 
+                    ccw(this.corners[i], this.corners[i+1], segmentIn.p1) != ccw(this.corners[i], this.corners[i+1], segmentIn.p2)) {
+                    return true
+                }
+
+            }
+
+        }
+        return false
+
     }
 
     function ccw(A, B, C) {

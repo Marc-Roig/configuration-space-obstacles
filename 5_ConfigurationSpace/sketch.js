@@ -21,6 +21,7 @@ function setup() {
     //Polygons
     polygons.push(new Polygon())
     scara = new Arm()
+    scara.setCsGrid(10) //0.5 degrees resolution
 
     cursor = new mappedCursor([-PI, PI], [-PI, PI], [width/2, width], [0, height])
     cursor.setPos(1,1)
@@ -34,7 +35,9 @@ function draw() {
     drawFrame()
 
     //RIGHT SCREEN
+    scara.renderCS()
     cursor.render()
+
     if (mouseInRightScreen()) {
 
         cursor.mouseFollow()
@@ -50,15 +53,16 @@ function draw() {
     // RENDER ALL POLYGONS
     for (let polygon of polygons) {
         polygon.render()
-    }    
+    }
+
     if (mouseInLeftScreen()) {
-        newAngles = scara.calculateInverse(mouseX - centerX, mouseY - centerY)
-        scara.setAngles(newAngles.angle1, newAngles.angle2)
-        cursor.setPos(newAngles.angle1, newAngles.angle2)
-        console.log(newAngles)
+        // newAngles = scara.calculateInverse(mouseX - centerX, mouseY - centerY)
+        // console.log(newAngles)
+        // scara.setAngles(newAngles.angle1, newAngles.angle2)
+        // cursor.setPos(newAngles.angle1, newAngles.angle2)
     }
     
-    // scara.detectCollisions(polygons)
+    scara.detectCollisions(polygons)
     scara.render()
 
     
@@ -109,13 +113,18 @@ function mousePressed() {
 
 function mouseReleased() {
 
+    let anyPolygonMoved = false
+
     for (let polygon of polygons) {
 
         if (!polygon.finished) continue
+        if (polygon.movable) anyPolygonMoved = true
         polygon.movable = false
         polygon.calculateSegments() //Segments used to optimize calculations have to be refreshed
 
     }
+
+    if (anyPolygonMoved) scara.calculateCS(polygons)
 }
 
 function keyTyped() {
@@ -145,6 +154,9 @@ function keyTyped() {
 
 function doubleClicked() {
 
+
+    //OBSTACLES
+
     polygons[polygons.length-1].corners.pop() //Because of the double click two corners are added, one is poped 
 
     if(polygons[polygons.length-1].corners.length < 3) return //Polygon needs at least 3 points
@@ -153,6 +165,11 @@ function doubleClicked() {
     polygons[polygons.length-1].calculateSegments() //Are vertices are precalculate to optimize calculations
 
     polygons.push(new Polygon()) //Once the polygon is finished prepare to draw another one
+
+    //CS CALCULATIONS
+    scara.calculateCS(polygons)
+    // scara.setAngles(0, 0)
+    // console.log(scara.isCollisioning(polygons))
 
 }
 
