@@ -1,11 +1,9 @@
 # Configuration-Space with obstacles
 
-For the purpose of path planning it is useful to work with the configuration space. This space transforms the common xy (2D in this case but it can be extrapolated to 3D) to the so called C-Space, where the angles of the robot are the variables of the system.
-
-This program will be able to transform normal xy coordinates of a SCARA robot and also transform the obstacles that will be in his surroundings to the C-Space. Applying some sort of path finding algorithm such as A* the fastest movement will be executed.
+For the purpose of path planning it is useful to work with the configuration space, whose variables are the angles of the arm. This program will be able to transform normal xy coordinates of a SCARA robot and also transform the obstacles that will be in his surroundings to the C-Space. Applying some sort of path finding algorithm such as A* the fastest movement will be executed.
 
 
-<a href="https://marc-roig.github.io/Configuration_Space_Obstacles/2_PointInsidePolygon/"  class="center"> <img border="0" alt="PolygonCollision" src="https://i.gyazo.com/fa1dd2b9af3915df379d525395c46e95.gif"> </a>
+<a href="https://marc-roig.github.io/Configuration_Space_Obstacles/5_ConfigurationSpace/"  class="center"> <img border="0" alt="PolygonCollision" src="https://i.gyazo.com/fa1dd2b9af3915df379d525395c46e95.gif"> </a>
 
 I divided the key concepts of the algorithm in various subfolders (click on images to see it in action).
 

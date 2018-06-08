@@ -21,7 +21,7 @@ function setup() {
     //Polygons
     polygons.push(new Polygon())
     scara = new Arm()
-    scara.setCsGrid(10) //0.5 degrees resolution
+    scara.setCsGrid(5) //5 degrees resolution
 
     cursor = new mappedCursor([-PI, PI], [-PI, PI], [width/2, width], [0, height])
     cursor.setPos(1,1)
