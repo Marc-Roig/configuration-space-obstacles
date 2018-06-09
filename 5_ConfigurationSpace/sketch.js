@@ -32,11 +32,12 @@ function setup() {
 function draw() {
 
     background('#0e0e0e')
-    drawFrame()
 
     //RIGHT SCREEN
     scara.renderCS()
     cursor.render()
+    
+    drawFrame()
 
     if (mouseInRightScreen()) {
 
